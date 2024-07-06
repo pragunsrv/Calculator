@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
         firstOperand: null,
         waitingForSecondOperand: false,
         operator: null,
-        history: ''
+        history: '',
+        memory: 0
     };
 
     const updateDisplay = () => {
@@ -72,6 +73,26 @@ document.addEventListener('DOMContentLoaded', () => {
         calculator.history = '';
     };
 
+    const handleMemory = (memoryOperation) => {
+        const { displayValue, memory } = calculator;
+        const inputValue = parseFloat(displayValue);
+
+        switch (memoryOperation) {
+            case 'mc':
+                calculator.memory = 0;
+                break;
+            case 'mr':
+                calculator.displayValue = memory.toString();
+                break;
+            case 'm+':
+                calculator.memory += inputValue;
+                break;
+            case 'm-':
+                calculator.memory -= inputValue;
+                break;
+        }
+    };
+
     const keys = document.querySelector('.calculator-keys');
     keys.addEventListener('click', (event) => {
         const { target } = event;
@@ -93,6 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'all-clear':
                 resetCalculator();
+                break;
+            case 'mc':
+            case 'mr':
+            case 'm+':
+            case 'm-':
+                handleMemory(value);
                 break;
             default:
                 if (Number.isInteger(parseFloat(value))) {
