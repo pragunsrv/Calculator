@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Calculator</title>
+    <title>Calculator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="calculator">
-        <input type="text" class="calculator-screen" value="" disabled />
+        <div class="calculator-display">
+            <div class="history"></div>
+            <input type="text" class="calculator-screen" value="" disabled />
+        </div>
         <div class="calculator-keys">
             <button type="button" class="operator" value="+">+</button>
             <button type="button" class="operator" value="-">-</button>

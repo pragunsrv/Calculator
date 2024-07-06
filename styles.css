@@ -13,22 +13,39 @@ body {
     border-radius: 5px;
     padding: 20px;
     box-shadow: 2px 2px 10px #aaa;
+    width: 400px;
+}
+
+.calculator-display {
+    margin-bottom: 10px;
 }
 
 .calculator-screen {
     width: 100%;
     height: 40px;
-    margin-bottom: 10px;
     text-align: right;
     padding-right: 10px;
     padding-left: 10px;
     font-size: 1.5em;
+    border: none;
+    background-color: #f4f4f4;
+    box-shadow: inset 0px 0px 2px #aaa;
+}
+
+.history {
+    text-align: right;
+    margin-bottom: 5px;
+    color: #888;
+}
+
+.calculator-keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
 }
 
 .calculator-keys button {
-    width: 22%;
-    height: 40px;
-    margin: 5px;
+    height: 50px;
     font-size: 1.2em;
     border-radius: 5px;
     border: none;
@@ -43,9 +60,11 @@ body {
 .calculator-keys button.equal-sign {
     background-color: #4caf50;
     color: white;
+    grid-column: span 2;
 }
 
 .calculator-keys button.all-clear {
     background-color: #f44336;
     color: white;
+    grid-column: span 2;
 }
