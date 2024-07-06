@@ -41,12 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = calculate(firstOperand, inputValue, operator);
             calculator.displayValue = `${parseFloat(result.toFixed(7))}`;
             calculator.firstOperand = result;
-            calculator.history += ` ${operator} ${inputValue}`;
+            calculator.history += ` ${firstOperand} ${operator} ${inputValue} = ${result}\n`;
         }
 
         calculator.waitingForSecondOperand = true;
         calculator.operator = nextOperator;
-        calculator.history += ` ${nextOperator}`;
     };
 
     const calculate = (firstOperand, secondOperand, operator) => {
@@ -93,6 +92,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const handleScientific = (operation) => {
+        const { displayValue } = calculator;
+        const inputValue = parseFloat(displayValue);
+
+        let result;
+        switch (operation) {
+            case 'square':
+                result = Math.pow(inputValue, 2);
+                break;
+            case 'sqrt':
+                result = Math.sqrt(inputValue);
+                break;
+            case 'sin':
+                result = Math.sin(inputValue);
+                break;
+            case 'cos':
+                result = Math.cos(inputValue);
+                break;
+            case 'tan':
+                result = Math.tan(inputValue);
+                break;
+        }
+        calculator.displayValue = `${parseFloat(result.toFixed(7))}`;
+        calculator.history += ` ${operation}(${inputValue}) = ${result}\n`;
+    };
+
     const keys = document.querySelector('.calculator-keys');
     keys.addEventListener('click', (event) => {
         const { target } = event;
@@ -120,6 +145,13 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'm+':
             case 'm-':
                 handleMemory(value);
+                break;
+            case 'square':
+            case 'sqrt':
+            case 'sin':
+            case 'cos':
+            case 'tan':
+                handleScientific(value);
                 break;
             default:
                 if (Number.isInteger(parseFloat(value))) {
