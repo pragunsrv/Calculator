@@ -3,18 +3,19 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #1e1e1e;
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .calculator {
-    border: 1px solid #ccc;
+    border: 1px solid #444;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 2px 2px 12px #aaa;
-    width: 400px;
-    background-color: #ffffff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 420px;
+    background-color: #2c2c2c;
+    color: #fff;
 }
 
 .calculator-display {
@@ -30,20 +31,22 @@ body {
     padding-left: 20px;
     font-size: 2em;
     border: none;
-    background-color: #e6e6e6;
-    box-shadow: inset 0px 0px 3px #aaa;
+    border-radius: 5px;
+    background-color: #444;
+    color: #fff;
+    box-shadow: inset 0px 0px 10px #000;
 }
 
 .history {
     text-align: right;
     margin-bottom: 5px;
-    color: #888;
+    color: #bbb;
     font-size: 0.9em;
 }
 
 .calculator-keys {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
 }
 
@@ -52,12 +55,19 @@ body {
     font-size: 1.5em;
     border-radius: 5px;
     border: none;
-    background-color: #e0e0e0;
+    background-color: #555;
+    color: #fff;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.calculator-keys button:hover {
+    background-color: #777;
 }
 
 .calculator-keys button.operator {
     background-color: #f9a825;
+    color: #000;
 }
 
 .calculator-keys button.equal-sign {
@@ -75,4 +85,5 @@ body {
 .calculator-keys button.memory,
 .calculator-keys button.scientific {
     background-color: #9e9e9e;
+    color: #000;
 }

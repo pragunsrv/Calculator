@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         calculator.waitingForSecondOperand = true;
         calculator.operator = nextOperator;
+        highlightOperator(nextOperator);
     };
 
     const calculate = (firstOperand, secondOperand, operator) => {
@@ -53,6 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (operator === '-') return firstOperand - secondOperand;
         if (operator === '*') return firstOperand * secondOperand;
         if (operator === '/') return firstOperand / secondOperand;
+        if (operator === 'exp') return Math.exp(secondOperand);
+        if (operator === 'log') return Math.log(secondOperand);
         return secondOperand;
     };
 
@@ -113,24 +116,39 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'tan':
                 result = Math.tan(inputValue);
                 break;
+            case 'exp':
+                result = Math.exp(inputValue);
+                break;
+            case 'log':
+                result = Math.log(inputValue);
+                break;
+            default:
+                return;
         }
-        calculator.displayValue = `${parseFloat(result.toFixed(7))}`;
+
+        calculator.displayValue = result.toString();
         calculator.history += ` ${operation}(${inputValue}) = ${result}\n`;
+    };
+
+    const highlightOperator = (operator) => {
+        const operatorButtons = document.querySelectorAll('.operator');
+        operatorButtons.forEach(button => {
+            button.style.backgroundColor = (button.value === operator) ? '#fbc02d' : '#f9a825';
+        });
     };
 
     const keys = document.querySelector('.calculator-keys');
     keys.addEventListener('click', (event) => {
         const { target } = event;
-        const { value } = target;
         if (!target.matches('button')) return;
+
+        const { value } = target;
 
         switch (value) {
             case '+':
             case '-':
             case '*':
             case '/':
-                handleOperator(value);
-                break;
             case '=':
                 handleOperator(value);
                 break;
@@ -151,6 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'sin':
             case 'cos':
             case 'tan':
+            case 'exp':
+            case 'log':
                 handleScientific(value);
                 break;
             default:
@@ -158,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     handleDigit(value);
                 }
         }
+
         updateDisplay();
     });
 
@@ -178,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (key === 'Escape') {
             resetCalculator();
         }
+
         updateDisplay();
     });
 
