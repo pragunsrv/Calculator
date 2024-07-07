@@ -230,6 +230,10 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'log':
                 handleScientific(value);
                 break;
+            case '(':
+            case ')':
+                handleDigit(value);
+                break;
             default:
                 if (Number.isInteger(parseFloat(value))) {
                     handleDigit(value);
@@ -254,6 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
             calculator.displayValue = calculator.displayValue.slice(0, -1) || '0';
         } else if (key === 'Escape') {
             resetCalculator();
+        } else if (key === '(' || key === ')') {
+            handleDigit(key);
         }
 
         updateDisplay();
