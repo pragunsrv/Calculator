@@ -37,6 +37,13 @@ body {
     box-shadow: inset 0px 0px 10px #000;
 }
 
+.memory-display {
+    text-align: left;
+    margin-bottom: 5px;
+    color: #bbb;
+    font-size: 0.9em;
+}
+
 .history {
     text-align: right;
     margin-bottom: 5px;
@@ -46,10 +53,24 @@ body {
     overflow: hidden;
 }
 
+.mode-switch {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff;
+}
+
 .calculator-keys {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
+}
+
+.basic-keys {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.scientific-keys {
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 10px;
 }
 
 .calculator-keys button {
@@ -60,7 +81,11 @@ body {
     background-color: #555;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.calculator-keys button:active {
+    transform: scale(0.95);
 }
 
 .calculator-keys button:hover {

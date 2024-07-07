@@ -12,8 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateDisplay = () => {
         const display = document.querySelector('.calculator-screen');
         const history = document.querySelector('.history');
+        const memoryDisplay = document.getElementById('memory-display');
         display.value = calculator.displayValue;
         history.textContent = calculator.history;
+        memoryDisplay.textContent = `M: ${calculator.memory}`;
     };
 
     const handleDigit = (digit) => {
@@ -73,13 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (secondOperand === 0) return 'Error';
             return firstOperand / secondOperand;
         }
-        if (operator === 'exp') return Math.exp(secondOperand);
-        if (operator === 'log') return Math.log(secondOperand);
         return secondOperand;
     };
 
     const handleDecimal = (dot) => {
-        if (calculator.waitingForSecondOperand) return;
+        if (calculator.error) return;
+
+        if (calculator.waitingForSecondOperand) {
+            calculator.displayValue = '0.';
+            calculator.waitingForSecondOperand = false;
+            return;
+        }
 
         if (!calculator.displayValue.includes(dot)) {
             calculator.displayValue += dot;
@@ -92,24 +98,33 @@ document.addEventListener('DOMContentLoaded', () => {
         calculator.waitingForSecondOperand = false;
         calculator.operator = null;
         calculator.history = '';
+        calculator.memory = 0;
         calculator.error = false;
+        highlightOperator(null);
     };
 
     const clearEntry = () => {
-        calculator.displayValue = '0';
-        calculator.error = false;
+        const { displayValue } = calculator;
+
+        if (displayValue.length === 1) {
+            calculator.displayValue = '0';
+        } else {
+            calculator.displayValue = displayValue.slice(0, -1);
+        }
     };
 
-    const handleMemory = (memoryOperation) => {
-        const { displayValue, memory } = calculator;
+    const handleMemory = (operation) => {
+        const { displayValue, error } = calculator;
         const inputValue = parseFloat(displayValue);
 
-        switch (memoryOperation) {
+        if (isNaN(inputValue) || error) return;
+
+        switch (operation) {
             case 'mc':
                 calculator.memory = 0;
                 break;
             case 'mr':
-                calculator.displayValue = memory.toString();
+                calculator.displayValue = calculator.memory.toString();
                 break;
             case 'm+':
                 calculator.memory += inputValue;
@@ -121,10 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const handleScientific = (operation) => {
-        const { displayValue } = calculator;
+        const { displayValue, error } = calculator;
         const inputValue = parseFloat(displayValue);
 
-        if (isNaN(inputValue)) return;
+        if (isNaN(inputValue) || error) return;
 
         let result;
         switch (operation) {
@@ -212,7 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay();
     });
 
-    // Add keyboard support
     document.addEventListener('keydown', (event) => {
         const key = event.key;
 
@@ -231,6 +245,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         updateDisplay();
+    });
+
+    document.getElementById('mode-toggle').addEventListener('change', (event) => {
+        const scientificKeys = document.querySelector('.scientific-keys');
+        if (event.target.checked) {
+            scientificKeys.style.display = 'grid';
+        } else {
+            scientificKeys.style.display = 'none';
+        }
     });
 
     updateDisplay();

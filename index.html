@@ -9,21 +9,17 @@
 <body>
     <div class="calculator">
         <div class="calculator-display">
+            <div class="memory-display" id="memory-display">M: 0</div>
             <div class="history"></div>
             <input type="text" class="calculator-screen" value="0" disabled />
         </div>
-        <div class="calculator-keys">
-            <button type="button" class="memory" value="mc">MC</button>
-            <button type="button" class="memory" value="mr">MR</button>
-            <button type="button" class="memory" value="m+">M+</button>
-            <button type="button" class="memory" value="m-">M-</button>
-            <button type="button" class="scientific" value="square">x²</button>
-            <button type="button" class="scientific" value="sqrt">√x</button>
-            <button type="button" class="scientific" value="sin">sin</button>
-            <button type="button" class="scientific" value="cos">cos</button>
-            <button type="button" class="scientific" value="tan">tan</button>
-            <button type="button" class="scientific" value="exp">exp</button>
-            <button type="button" class="scientific" value="log">log</button>
+        <div class="mode-switch">
+            <label>
+                <input type="checkbox" id="mode-toggle">
+                <span>Scientific Mode</span>
+            </label>
+        </div>
+        <div class="calculator-keys basic-keys">
             <button type="button" class="operator" value="+">+</button>
             <button type="button" class="operator" value="-">-</button>
             <button type="button" class="operator" value="*">&times;</button>
@@ -42,6 +38,19 @@
             <button type="button" class="all-clear" value="all-clear">AC</button>
             <button type="button" class="clear-entry" value="clear-entry">CE</button>
             <button type="button" class="equal-sign" value="=">=</button>
+        </div>
+        <div class="calculator-keys scientific-keys" style="display: none;">
+            <button type="button" class="memory" value="mc">MC</button>
+            <button type="button" class="memory" value="mr">MR</button>
+            <button type="button" class="memory" value="m+">M+</button>
+            <button type="button" class="memory" value="m-">M-</button>
+            <button type="button" class="scientific" value="square">x²</button>
+            <button type="button" class="scientific" value="sqrt">√x</button>
+            <button type="button" class="scientific" value="sin">sin</button>
+            <button type="button" class="scientific" value="cos">cos</button>
+            <button type="button" class="scientific" value="tan">tan</button>
+            <button type="button" class="scientific" value="exp">exp</button>
+            <button type="button" class="scientific" value="log">log</button>
         </div>
     </div>
     <script src="script.js"></script>
