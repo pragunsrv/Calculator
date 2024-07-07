@@ -6,15 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
         operator: null,
         history: '',
         memory: 0,
-        error: false
+        error: false,
+        isDegree: true,
     };
 
     const updateDisplay = () => {
         const display = document.querySelector('.calculator-screen');
-        const history = document.querySelector('.history');
-        const memoryDisplay = document.getElementById('memory-display');
         display.value = calculator.displayValue;
-        history.textContent = calculator.history;
+        const memoryDisplay = document.getElementById('memory-display');
         memoryDisplay.textContent = `M: ${calculator.memory}`;
     };
 
@@ -148,8 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const handleScientific = (operation) => {
-        const { displayValue, error } = calculator;
+        const { displayValue, error, isDegree } = calculator;
         const inputValue = parseFloat(displayValue);
+        let angle = inputValue;
+
+        if (isDegree) {
+            angle = inputValue * (Math.PI / 180);
+        }
 
         if (isNaN(inputValue) || error) return;
 
@@ -162,13 +166,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 result = Math.sqrt(inputValue);
                 break;
             case 'sin':
-                result = Math.sin(inputValue);
+                result = Math.sin(angle);
                 break;
             case 'cos':
-                result = Math.cos(inputValue);
+                result = Math.cos(angle);
                 break;
             case 'tan':
-                result = Math.tan(inputValue);
+                result = Math.tan(angle);
                 break;
             case 'exp':
                 result = Math.exp(inputValue);
@@ -276,6 +280,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('theme-toggle').addEventListener('change', (event) => {
         document.body.classList.toggle('light-theme');
+    });
+
+    document.getElementById('degree-toggle').addEventListener('change', (event) => {
+        calculator.isDegree = event.target.checked;
+    });
+
+    document.getElementById('clear-history').addEventListener('click', () => {
+        const historyList = document.getElementById('history-list');
+        historyList.innerHTML = '';
+        calculator.history = '';
     });
 
     updateDisplay();
