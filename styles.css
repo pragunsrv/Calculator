@@ -42,6 +42,8 @@ body {
     margin-bottom: 5px;
     color: #bbb;
     font-size: 0.9em;
+    height: 20px;
+    overflow: hidden;
 }
 
 .calculator-keys {
@@ -76,7 +78,8 @@ body {
     grid-column: span 2;
 }
 
-.calculator-keys button.all-clear {
+.calculator-keys button.all-clear,
+.calculator-keys button.clear-entry {
     background-color: #f44336;
     color: white;
     grid-column: span 2;

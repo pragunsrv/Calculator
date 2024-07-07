@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
         waitingForSecondOperand: false,
         operator: null,
         history: '',
-        memory: 0
+        memory: 0,
+        error: false
     };
 
     const updateDisplay = () => {
@@ -16,9 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const handleDigit = (digit) => {
-        const { displayValue, waitingForSecondOperand } = calculator;
+        const { displayValue, waitingForSecondOperand, error } = calculator;
 
-        if (waitingForSecondOperand) {
+        if (error) {
+            calculator.displayValue = digit;
+            calculator.error = false;
+        } else if (waitingForSecondOperand) {
             calculator.displayValue = digit;
             calculator.waitingForSecondOperand = false;
         } else {
@@ -27,8 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const handleOperator = (nextOperator) => {
-        const { firstOperand, displayValue, operator } = calculator;
+        const { firstOperand, displayValue, operator, error } = calculator;
         const inputValue = parseFloat(displayValue);
+
+        if (error) {
+            resetCalculator();
+            return;
+        }
 
         if (operator && calculator.waitingForSecondOperand) {
             calculator.operator = nextOperator;
@@ -39,6 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
             calculator.firstOperand = inputValue;
         } else if (operator) {
             const result = calculate(firstOperand, inputValue, operator);
+
+            if (result === 'Error') {
+                calculator.displayValue = 'Error';
+                calculator.error = true;
+                return;
+            }
+
             calculator.displayValue = `${parseFloat(result.toFixed(7))}`;
             calculator.firstOperand = result;
             calculator.history += ` ${firstOperand} ${operator} ${inputValue} = ${result}\n`;
@@ -53,7 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (operator === '+') return firstOperand + secondOperand;
         if (operator === '-') return firstOperand - secondOperand;
         if (operator === '*') return firstOperand * secondOperand;
-        if (operator === '/') return firstOperand / secondOperand;
+        if (operator === '/') {
+            if (secondOperand === 0) return 'Error';
+            return firstOperand / secondOperand;
+        }
         if (operator === 'exp') return Math.exp(secondOperand);
         if (operator === 'log') return Math.log(secondOperand);
         return secondOperand;
@@ -73,6 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
         calculator.waitingForSecondOperand = false;
         calculator.operator = null;
         calculator.history = '';
+        calculator.error = false;
+    };
+
+    const clearEntry = () => {
+        calculator.displayValue = '0';
+        calculator.error = false;
     };
 
     const handleMemory = (memoryOperation) => {
@@ -99,10 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const { displayValue } = calculator;
         const inputValue = parseFloat(displayValue);
 
+        if (isNaN(inputValue)) return;
+
         let result;
         switch (operation) {
             case 'square':
-                result = Math.pow(inputValue, 2);
+                result = inputValue * inputValue;
                 break;
             case 'sqrt':
                 result = Math.sqrt(inputValue);
@@ -157,6 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'all-clear':
                 resetCalculator();
+                break;
+            case 'clear-entry':
+                clearEntry();
                 break;
             case 'mc':
             case 'mr':
