@@ -18,28 +18,29 @@ document.addEventListener('DOMContentLoaded', () => {
         memoryDisplay.textContent = `M: ${calculator.memory}`;
     };
 
-    const handleDigit = (digit) => {
-        const { displayValue, waitingForSecondOperand, error } = calculator;
+    const updateHistoryList = () => {
+        const historyList = document.getElementById('history-list');
+        const listItem = document.createElement('li');
+        listItem.textContent = calculator.history;
+        historyList.appendChild(listItem);
+    };
 
-        if (error) {
-            calculator.displayValue = digit;
-            calculator.error = false;
-        } else if (waitingForSecondOperand) {
+    const handleDigit = (digit) => {
+        if (calculator.error) return;
+
+        if (calculator.waitingForSecondOperand) {
             calculator.displayValue = digit;
             calculator.waitingForSecondOperand = false;
         } else {
-            calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;
+            calculator.displayValue = calculator.displayValue === '0' ? digit : calculator.displayValue + digit;
         }
     };
 
     const handleOperator = (nextOperator) => {
-        const { firstOperand, displayValue, operator, error } = calculator;
-        const inputValue = parseFloat(displayValue);
+        if (calculator.error) return;
 
-        if (error) {
-            resetCalculator();
-            return;
-        }
+        const { firstOperand, displayValue, operator } = calculator;
+        const inputValue = parseFloat(displayValue);
 
         if (operator && calculator.waitingForSecondOperand) {
             calculator.operator = nextOperator;
@@ -59,23 +60,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
             calculator.displayValue = `${parseFloat(result.toFixed(7))}`;
             calculator.firstOperand = result;
-            calculator.history += ` ${firstOperand} ${operator} ${inputValue} = ${result}\n`;
         }
 
         calculator.waitingForSecondOperand = true;
         calculator.operator = nextOperator;
+        updateHistory();
         highlightOperator(nextOperator);
     };
 
     const calculate = (firstOperand, secondOperand, operator) => {
-        if (operator === '+') return firstOperand + secondOperand;
-        if (operator === '-') return firstOperand - secondOperand;
-        if (operator === '*') return firstOperand * secondOperand;
-        if (operator === '/') {
-            if (secondOperand === 0) return 'Error';
-            return firstOperand / secondOperand;
+        if (operator === '+') {
+            return firstOperand + secondOperand;
+        } else if (operator === '-') {
+            return firstOperand - secondOperand;
+        } else if (operator === '*') {
+            return firstOperand * secondOperand;
+        } else if (operator === '/') {
+            return secondOperand === 0 ? 'Error' : firstOperand / secondOperand;
         }
+
         return secondOperand;
+    };
+
+    const updateHistory = () => {
+        const { firstOperand, displayValue, operator } = calculator;
+        calculator.history += `${firstOperand || ''} ${operator || ''} ${displayValue || ''} = ${calculator.displayValue}\n`;
+        updateHistoryList();
     };
 
     const handleDecimal = (dot) => {
@@ -101,6 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
         calculator.memory = 0;
         calculator.error = false;
         highlightOperator(null);
+        const historyList = document.getElementById('history-list');
+        historyList.innerHTML = '';
     };
 
     const clearEntry = () => {
@@ -169,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         calculator.displayValue = result.toString();
-        calculator.history += ` ${operation}(${inputValue}) = ${result}\n`;
+        updateHistory();
     };
 
     const highlightOperator = (operator) => {
@@ -254,6 +266,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             scientificKeys.style.display = 'none';
         }
+    });
+
+    document.getElementById('theme-toggle').addEventListener('change', (event) => {
+        document.body.classList.toggle('light-theme');
     });
 
     updateDisplay();

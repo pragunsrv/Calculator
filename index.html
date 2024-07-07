@@ -18,6 +18,10 @@
                 <input type="checkbox" id="mode-toggle">
                 <span>Scientific Mode</span>
             </label>
+            <label>
+                <input type="checkbox" id="theme-toggle">
+                <span>Dark Theme</span>
+            </label>
         </div>
         <div class="calculator-keys basic-keys">
             <button type="button" class="operator" value="+">+</button>
@@ -51,6 +55,10 @@
             <button type="button" class="scientific" value="tan">tan</button>
             <button type="button" class="scientific" value="exp">exp</button>
             <button type="button" class="scientific" value="log">log</button>
+        </div>
+        <div class="history-container">
+            <h3>Calculation History</h3>
+            <ul id="history-list"></ul>
         </div>
     </div>
     <script src="script.js"></script>
