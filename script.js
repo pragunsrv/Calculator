@@ -276,10 +276,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             scientificKeys.style.display = 'none';
         }
+        document.querySelector('.calculator').classList.toggle('scientific-mode', event.target.checked);
     });
 
     document.getElementById('theme-toggle').addEventListener('change', (event) => {
-        document.body.classList.toggle('light-theme');
+        document.body.classList.toggle('light-theme', event.target.checked);
     });
 
     document.getElementById('degree-toggle').addEventListener('change', (event) => {
